@@ -1,0 +1,72 @@
+<!doctype html>
+<html><head><meta charset="utf-8"><title>Depression Care Gap Summary</title>
+<style>
+@page { size: 8.5in 11in; margin: 0.45in 0.65in; }
+* { box-sizing: border-box; }
+body { margin: 0; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 10pt; color: #222; line-height: 1.38; }
+.top { border-bottom: 2.5px solid #1F4E79; padding-bottom: 6px; margin-bottom: 12px; }
+h1 { font-size: 17pt; margin: 0; color: #1F4E79; }
+.sub { font-size: 9pt; color: #555; margin-top: 3px; }
+.big { background: #f2f6fa; border-left: 4px solid #1F4E79; padding: 9px 12px; font-size: 13pt; font-weight: 700; color: #1F4E79; margin: 0 0 14px; line-height: 1.35; }
+h2 { font-size: 11.5pt; color: #1F4E79; margin: 12px 0 5px; }
+.num { display: inline-block; min-width: 1.4em; height: 1.4em; line-height: 1.4em; text-align: center; border-radius: 50%; background: #1F4E79; color: #fff; font-size: 9pt; margin-right: 6px; vertical-align: 1px; }
+p { margin: 0 0 6px; }
+ul { margin: 0; padding-left: 18px; } li { margin-bottom: 4px; }
+.tiles { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+.tile { border: 1px solid #c9d3de; border-radius: 4px; padding: 8px 10px; }
+.tile .v { font-size: 19pt; font-weight: 300; font-variant-numeric: tabular-nums; }
+.tile .l { font-size: 9pt; color: #444; }
+.good { color: #1e6b33; } .bad { color: #b3261e; }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 8px 0; }
+.box { border: 1px solid #c9d3de; border-radius: 4px; padding: 8px 10px; }
+.box b { color: #1F4E79; }
+.bar { height: 12px; border-radius: 3px; margin: 4px 0 2px; }
+.small { font-size: 8.6pt; color: #555; }
+.fix { display: flex; gap: 8px; margin-bottom: 6px; }
+.foot { margin-top: 14px; font-size: 8pt; color: #666; border-top: 1px solid #ccc; padding-top: 5px; }
+</style></head><body>
+<div class="top">
+  <h1>Why Torrance Memorial's Depression Scores Are Low, and an Easy Fix</h1>
+  <div class="sub">Nancy Yeo · Clinical Quality Analyst candidate · October 2026</div>
+</div>
+
+<div class="big">Patients may be getting better, but they aren't given the survey that proves it.</div>
+
+<h2><span class="num">1</span>The problem (real Medicare data, 2024)</h2>
+<p>Torrance Memorial's doctors' network is scored by Medicare on quality. It does great on blood pressure, but poorly on depression.</p>
+<div class="tiles">
+  <div class="tile"><div class="v good">Top 5%</div><div class="l">in the country for blood pressure control</div></div>
+  <div class="tile"><div class="v bad">7 in 100</div><div class="l">depressed patients counted as recovered after a year (typical network nationally: 14 in 100)</div></div>
+</div>
+
+<h2><span class="num">2</span>Why it happens</h2>
+<p>Doctors check for depression with a survey. There's a <b>short 2-question survey</b> and a <b>full 9-question survey</b>. Only the full survey can show that a patient recovered.</p>
+<p>Adults usually get only the short survey. If they're doing better, they never get the full one, so <b>they can't be counted as recovered.</b> Teens get the full survey at every checkup.</p>
+<div class="compare">
+  <div class="box"><b>Adults</b> (short survey first)
+    <div class="bar" style="width:12%; background:#b3261e"></div><div class="small">12 in 100 got the full survey a year later</div>
+    <div class="bar" style="width:2%; min-width:4px; background:#b3261e"></div><div class="small">2 in 100 counted as recovered</div>
+  </div>
+  <div class="box"><b>Teens</b> (full survey at every checkup)
+    <div class="bar" style="width:76%; background:#1F4E79"></div><div class="small">76 in 100 got the full survey a year later</div>
+    <div class="bar" style="width:67%; background:#1F4E79"></div><div class="small">67 in 100 counted as recovered</div>
+  </div>
+</div>
+<p class="small">From simulated patient records (real records are private), so this is a strong lead to confirm with Torrance Memorial's own data.</p>
+
+<h2><span class="num">3</span>The fix: three small changes to the medical-records system</h2>
+<div class="fix"><span class="num">A</span><div><b>Give the full survey a year later</b> to anyone who had a high score before.</div></div>
+<div class="fix"><span class="num">B</span><div><b>Require a depression check at every yearly checkup.</b> Half of all missed checks happened at checkups.</div></div>
+<div class="fix"><span class="num">C</span><div><b>Add a box to record the score</b> at pregnancy visits.</div></div>
+<p>In the simulation, these raise the share of patients checked from <b>71% to 80%</b>, even if only half of visits use them.</p>
+
+<h2><span class="num">4</span>Why this is the right move</h2>
+<ul>
+  <li><b>Cheap:</b> no new staff, just system settings.</li>
+  <li><b>Fast:</b> results in 1 to 3 months.</li>
+  <li><b>Easy to track:</b> if more than about 80% of checkups include the depression check in a month, it's working.</li>
+  <li><b>First step:</b> one query on Torrance Memorial's real records to confirm adults mostly get the short survey.</li>
+</ul>
+
+<div class="foot">Dashboard: claude.ai/artifact/YaLXFSWQqR4bV7pUkPseua · Full details: github.com/yeonancy56/depression-care-gap-analysis<br>Real data: Medicare Shared Savings Program results, 2024. Patient data is simulated (no real patients). The 9-question survey is the PHQ-9; the 2-question survey is the PHQ-2; "recovered" means remission (PHQ-9 score below 5).</div>
+</body></html>

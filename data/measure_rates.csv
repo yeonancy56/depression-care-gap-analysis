@@ -1,0 +1,3 @@
+quality_id,measure_name,denominator,numerator,rate,source
+134,Depression Screening & Follow-Up Plan,7459,5280,70.8,"Simulated (Synthea), measurement year 2025"
+370,Depression Remission at 12 Months (broad version),318,44,13.8,"Simulated (Synthea), index Nov 2023 - Oct 2024"

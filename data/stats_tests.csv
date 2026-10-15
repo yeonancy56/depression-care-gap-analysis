@@ -1,0 +1,6 @@
+test,groups,method,p_value,verdict
+"134: screened-and-followed-up rate, had a 2025 wellness exam vs not",no wellness exam 160/1043 = 15.3%; wellness exam 5120/6416 = 79.8%,chi-square,< 0.001,significant
+"370: remission rate, teens (routine PHQ-9) vs adults (PHQ-2 first)",Adult 18+ 5/260 = 1.9%; Teen 12-17 39/58 = 67.2%,chi-square,< 0.001,significant
+134 by payer,Private 2679/4020 = 66.6%; Medicaid 613/919 = 66.7%; Uninsured 340/487 = 69.8%; Dual (Medicare + Medicaid) 213/265 = 80.4%; Medicare 1435/1768 = 81.2%,chi-square,< 0.001,significant
+134 by age band,18-34 1098/2050 = 53.6%; 35-49 1136/1705 = 66.6%; 12-17 617/829 = 74.4%; 50-64 1429/1712 = 83.5%; 65+ 1000/1163 = 86.0%,chi-square,< 0.001,significant
+134 by social isolation,Not isolated 3439/5027 = 68.4%; Socially isolated 1841/2432 = 75.7%,chi-square,< 0.001,significant

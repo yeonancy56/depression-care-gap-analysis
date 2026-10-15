@@ -1,0 +1,16 @@
+check_name,rows_checked,rows_failed,pass_rule
+01 Duplicate patient IDs,11291,0,must be 0
+02 Duplicate encounter IDs,373688,0,must be 0
+"03 Duplicate PHQ results (same patient, time, test, score)",49261,0,must be 0
+04 Encounter STOP missing or before START,373688,0,must be 0
+05 Encounters with no matching patient,373688,0,must be 0
+06 PHQ results with no matching encounter,49261,0,must be 0
+07a Death Certification visits dated after death,373688,1159,expected: paperwork visit; must be kept out of the measure denominator
+07b Other visits before birth or after death,373688,0,must be 0
+08 PHQ-2 score missing or outside 0-6,42893,0,must be 0
+09 PHQ-9 / PHQ-9 teen score missing or outside 0-27,6368,0,must be 0
+"10 PHQ-9 adult form used under 18, or teen form used 18+",6368,0,expected 0; any failures are listed in the log
+11 Depression-screening procedures with no PHQ score in the same visit,98526,2674,"finding, not an error: measures must count a screen only when a score exists"
+12 PHQ-9 without a positive PHQ-2 in the same visit,2636,1,finding: shows how the simulated pathway works
+13 2025 outpatient visits with no payer,40239,0,must be 0
+14 PHQ codes with more than one description,3,0,must be 0

@@ -1,0 +1,9 @@
+measure,root_cause,patients,pct_of_failures,cumulative_pct
+134,"A. Had a 2025 annual wellness exam, no screen recorded",1118,51.3,51.3
+134,"B. No wellness exam in 2025; only problem or other visits, none screened",687,31.5,82.8
+134,C. Screen documented without a score (mostly prenatal/postnatal visits),335,15.4,98.2
+134,"D. Teen positive screen, no follow-up plan",39,1.8,100.0
+370,"A. Screened in the window with a negative PHQ-2, so no PHQ-9 was given",161,58.8,58.8
+370,"B. Had a visit in the window, no depression screen at all",45,16.4,75.2
+370,C. No visit in the 12-month window,36,13.1,88.3
+370,"D. Re-measured in the window, still depressed (PHQ-9 5+)",32,11.7,100.0

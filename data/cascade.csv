@@ -1,0 +1,11 @@
+age_group,step_order,step,patients,pct_of_start
+Adult 18+,1,1. Scored 10+ on PHQ-9,260,100.0
+Adult 18+,2,2. Had a visit at 12 months,223,85.8
+Adult 18+,3,3. Screened at 12 months,184,70.8
+Adult 18+,4,4. Given a PHQ-9 at 12 months,32,12.3
+Adult 18+,5,5. In remission (PHQ-9 < 5),5,1.9
+Teen 12-17,1,1. Scored 10+ on PHQ-9,58,100.0
+Teen 12-17,2,2. Had a visit at 12 months,57,98.3
+Teen 12-17,3,3. Screened at 12 months,51,87.9
+Teen 12-17,4,4. Given a PHQ-9 at 12 months,44,75.9
+Teen 12-17,5,5. In remission (PHQ-9 < 5),39,67.2

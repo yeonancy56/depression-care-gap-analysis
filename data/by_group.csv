@@ -1,0 +1,15 @@
+measure,dimension,grp,patients,passed,rate
+134,Age band,18-34,2050,1098,53.6
+134,Age band,35-49,1705,1136,66.6
+134,Age band,12-17,829,617,74.4
+134,Age band,50-64,1712,1429,83.5
+134,Age band,65+,1163,1000,86.0
+134,Payer,Private,4020,2679,66.6
+134,Payer,Medicaid,919,613,66.7
+134,Payer,Uninsured,487,340,69.8
+134,Payer,Dual (Medicare + Medicaid),265,213,80.4
+134,Payer,Medicare,1768,1435,81.2
+134,Social isolation,Not isolated,5027,3439,68.4
+134,Social isolation,Socially isolated,2432,1841,75.7
+370,Age group,Adult 18+,260,5,1.9
+370,Age group,Teen 12-17,58,39,67.2

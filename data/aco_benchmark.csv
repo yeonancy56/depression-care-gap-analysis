@@ -1,0 +1,11 @@
+quality_id,measure_name,direction,tmip_value,national_median,acos_reporting,pct_acos_worse_than_tmip,source
+370,Depression Remission at 12 Months,Higher is better,7.41,14.29,388,19.0,Real: CMS Shared Savings Program PY2024
+134,Depression Screening & Follow-Up Plan,Higher is better,73.82,83.73,391,19.0,Real: CMS Shared Savings Program PY2024
+113,Colorectal Cancer Screening,Higher is better,76.65,80.23,391,36.0,Real: CMS Shared Savings Program PY2024
+112,Breast Cancer Screening,Higher is better,82.03,82.59,391,47.0,Real: CMS Shared Savings Program PY2024
+318,Falls: Screening for Future Fall Risk,Higher is better,91.57,91.53,391,50.0,Real: CMS Shared Savings Program PY2024
+438,Statin Therapy for Cardiovascular Disease,Higher is better,87.45,87.33,388,51.0,Real: CMS Shared Savings Program PY2024
+110,Influenza Immunization,Higher is better,70.51,70.06,391,52.0,Real: CMS Shared Savings Program PY2024
+479,"Hospital-Wide Readmission (per CMS, rate)",Lower is better,0.1506,0.15,448,54.0,Real: CMS Shared Savings Program PY2024
+001,Diabetes: A1c Poor Control (>9%),Lower is better,7.98,8.44,391,56.0,Real: CMS Shared Savings Program PY2024
+236,Controlling High Blood Pressure,Higher is better,90.59,80.24,391,95.0,Real: CMS Shared Savings Program PY2024

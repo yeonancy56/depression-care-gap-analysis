@@ -1,0 +1,5 @@
+measure,r_scenario,current_rate,rate_at_50pct_adoption,rate_at_100pct_adoption,levers
+134,n/a,70.8,80.4,90.1,L1 + L3
+370,ceiling,13.8,36.3,58.7,M1
+370,floor,13.8,17.8,21.7,M1
+370,middle,13.8,26.5,39.2,M1

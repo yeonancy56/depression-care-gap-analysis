@@ -1,0 +1,505 @@
+<style>
+#dash-root { --dash-gutter: clamp(16px, 3vw, 40px); }
+.dg { max-width: 1120px; margin-inline: auto; display: flex; flex-direction: column; gap: var(--cds-gap-xl); font-family: var(--font-anthropic-sans); color: var(--color-fg); }
+.dg-head { display: flex; flex-direction: column; gap: var(--cds-gap-sm); }
+.dg-eyebrow { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); letter-spacing: .04em; text-transform: uppercase; }
+.dg-title { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: var(--cds-font-size-title); line-height: 1.2; margin: 0; text-wrap: balance; }
+.dg-lede { font-size: var(--cds-font-size-body); max-width: 70ch; line-height: 1.55; margin: 0; }
+.dg-legend { display: flex; flex-wrap: wrap; gap: var(--cds-gap-sm); font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.dg-pill { display: inline-flex; align-items: center; gap: 6px; padding: 2px 10px; border: 1px solid var(--color-border-line); border-radius: 999px; }
+.dg-pill i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.dg-sec { display: flex; flex-direction: column; gap: var(--cds-gap-md); }
+.dg-sec h2 { font-size: var(--cds-font-size-heading); font-weight: var(--cds-font-weight-medium); margin: 0; display: flex; gap: var(--cds-gap-sm); align-items: baseline; flex-wrap: wrap; }
+.dg-tag { font-size: var(--cds-font-size-caption); font-weight: 400; padding: 1px 8px; border-radius: 999px; border: 1px solid var(--color-border-line); color: var(--color-fg-muted); }
+.dg-tag.real { color: var(--color-ok); border-color: currentColor; }
+.dg-cap { margin: 0; max-width: 75ch; line-height: 1.55; font-size: var(--cds-font-size-body); }
+.dg-cap b, .dg-tile b, .dg b { font-weight: 600; }
+.dg-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--cds-gap-md); }
+.dg-card { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: var(--cds-gap-sm); min-width: 0; }
+.dg-card h3 { font-size: var(--cds-font-size-body); font-weight: var(--cds-font-weight-medium); margin: 0; }
+.dg-note { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); margin: 0; line-height: 1.45; }
+.dg-chart { position: relative; width: 100%; min-height: 220px; }
+.dg-chart svg { display: block; overflow: visible; }
+.dg-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr)); gap: var(--cds-gap-md); }
+.dg-tile { background: var(--color-panel); border: 1px solid var(--color-border-line); border-radius: var(--cds-radius); padding: var(--cds-pad-lg); display: flex; flex-direction: column; gap: 4px; }
+.dg-big { font-family: var(--font-anthropic-serif); font-weight: 400; font-size: 2.4rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+.dg-big.accent { color: var(--dg-accent); }
+.dg-small { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); font-variant-numeric: tabular-nums; }
+.dg-arrow { color: var(--color-fg-muted); font-family: var(--font-anthropic-sans); font-size: 1.4rem; margin-inline: 4px; }
+.dg-tablewrap { overflow-x: auto; }
+.dg-table { width: 100%; border-collapse: collapse; font-size: var(--cds-font-size-caption); font-variant-numeric: tabular-nums; }
+.dg-table th { text-align: left; font-weight: var(--cds-font-weight-medium); color: var(--color-fg-muted); padding: 6px 8px; border-bottom: 1px solid var(--color-border-line); white-space: nowrap; }
+.dg-table td { padding: 7px 8px; border-bottom: 1px solid var(--color-border-line); vertical-align: top; }
+.dg-table td.n, .dg-table th.n { text-align: right; white-space: nowrap; }
+.dg-table tr.pick td { color: var(--dg-accent); font-weight: 600; }
+.dg-foot { font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); border-top: 1px solid var(--color-border-line); padding-top: var(--cds-pad-md); line-height: 1.5; }
+.dg-tip { position: absolute; pointer-events: none; background: var(--cds-surface-popover); border: 1px solid var(--cds-border); border-radius: var(--cds-radius); box-shadow: var(--cds-shadow-popover); padding: var(--cds-pad-xs) var(--cds-pad-sm); font-size: var(--cds-font-size-caption); max-width: 260px; z-index: 5; line-height: 1.4; }
+.dg-tip .k { color: var(--cds-text-secondary); }
+.dg-fail { display: flex; align-items: center; justify-content: center; gap: 8px; min-height: 120px; font-size: var(--cds-font-size-caption); color: var(--color-fg-muted); }
+.dg-fail::before { content: ""; width: .375rem; height: .375rem; border-radius: 50%; background: var(--color-bad); }
+[data-dash-source-state=empty] { color: transparent; }
+[data-dash-source-state=refreshing] { opacity: .5; transition: opacity var(--cds-dur-slow); }
+.dg-steps { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; line-height: 1.5; max-width: 80ch; }
+</style>
+
+<div class="dg">
+  <header class="dg-head" id="top">
+    <div class="dg-eyebrow">Torrance Memorial depression scores · Nancy Yeo</div>
+    <h1 class="dg-title">Patients may be getting better, but they aren't given the survey that proves it</h1>
+    <p class="dg-lede">
+      Recovery from depression can only be counted with a full 9-question survey, but most adults only get a short 2-question version.
+      Of adults with a high depression score, <b class="cell dash-skeleton" data-source="cascade" data-field="pct_of_start" data-where="age_group=Adult 18%2B&amp;step_order=3" data-fmt="pct">—</b> came back and were checked a year later, but only
+      <b class="cell dash-skeleton" data-source="cascade" data-field="pct_of_start" data-where="age_group=Adult 18%2B&amp;step_order=4" data-fmt="pct">—</b> got the full survey, so only
+      <b class="cell dash-skeleton" data-source="cascade" data-field="pct_of_start" data-where="age_group=Adult 18%2B&amp;step_order=5" data-fmt="pct">—</b> could be counted as recovered.
+      Three small changes to the medical-records system fix most of it.
+    </p>
+    <div class="dg-legend">
+      <span class="dg-pill"><i style="background: var(--color-ok)"></i>Real: Medicare quality data, 2024</span>
+      <span class="dg-pill"><i style="background: var(--color-fg-muted)"></i>Simulated: fake patient records (real records are private)</span>
+    </div>
+  </header>
+
+  <!-- 1. The gap -->
+  <section class="dg-sec" id="gap">
+    <h2>1. Torrance Memorial vs. other networks <span class="dg-tag real">Real data</span></h2>
+    <p class="dg-cap">
+      Torrance Memorial's doctors' network beats
+      <b class="cell dash-skeleton" data-source="aco" data-field="pct_acos_worse_than_tmip" data-where="quality_id=236" data-fmt="pct0">—</b> of networks nationally on blood pressure,
+      but only <b class="cell dash-skeleton" data-source="aco" data-field="pct_acos_worse_than_tmip" data-where="quality_id=370" data-fmt="pct0">—</b> on depression. Only
+      <b class="cell dash-skeleton" data-source="aco" data-field="tmip_value" data-where="quality_id=370" data-fmt="pct2">—</b> of depressed patients are counted as recovered after a year; a typical network counts
+      <b class="cell dash-skeleton" data-source="aco" data-field="national_median" data-where="quality_id=370" data-fmt="pct2">—</b>.
+    </p>
+    <div class="dg-card">
+      <h3>Share of networks Torrance Memorial beats, on each Medicare quality score</h3>
+      <p class="dg-note">2024. Longer bar = better. 50% = the middle of the pack. Depression scores highlighted.</p>
+      <div class="dg-chart" id="chart-aco" data-source="aco"></div>
+    </div>
+  </section>
+
+  <!-- 2. The measures rebuilt -->
+  <section class="dg-sec" id="measures">
+    <h2>2. The two depression scores, rebuilt from patient records <span class="dg-tag">Simulated</span></h2>
+    <p class="dg-cap">Both Medicare scores rebuilt from simulated visit, survey, diagnosis and medication records, then double-checked with 14 data checks and a by-hand review of 10 patients.</p>
+    <div class="dg-tiles">
+      <div class="dg-tile">
+        <div class="dg-small">Patients checked for depression (and followed up), 2025</div>
+        <div class="dg-big accent"><span class="cell dash-skeleton" data-source="measures" data-field="rate" data-where="quality_id=134" data-fmt="pct">—</span></div>
+        <div class="dg-small"><span class="cell" data-source="measures" data-field="numerator" data-where="quality_id=134" data-fmt="int">—</span> of <span class="cell" data-source="measures" data-field="denominator" data-where="quality_id=134" data-fmt="int">—</span> patients aged 12 and up</div>
+      </div>
+      <div class="dg-tile">
+        <div class="dg-small">Depressed patients counted as recovered after a year</div>
+        <div class="dg-big accent"><span class="cell dash-skeleton" data-source="measures" data-field="rate" data-where="quality_id=370" data-fmt="pct">—</span></div>
+        <div class="dg-small"><span class="cell" data-source="measures" data-field="numerator" data-where="quality_id=370" data-fmt="int">—</span> of <span class="cell" data-source="measures" data-field="denominator" data-where="quality_id=370" data-fmt="int">—</span> patients with a high depression score</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 3. The headline -->
+  <section class="dg-sec" id="cascade">
+    <h2>3. The main finding <span class="dg-tag">Simulated</span></h2>
+    <p class="dg-cap">
+      Adults mostly come back, but they get the short survey, so recovery can't be shown. Teens get the full survey at every checkup:
+      <b class="cell dash-skeleton" data-source="cascade" data-field="pct_of_start" data-where="age_group=Teen 12-17&amp;step_order=4" data-fmt="pct">—</b> got the full survey,
+      <b class="cell dash-skeleton" data-source="cascade" data-field="pct_of_start" data-where="age_group=Teen 12-17&amp;step_order=5" data-fmt="pct">—</b> counted as recovered.
+    </p>
+    <div class="dg-card">
+      <h3>Patients with a high depression score, followed for a year</h3>
+      <p class="dg-note">Share of each group still on track at each step. Red = the biggest drop. The adult vs. teen gap is statistically significant.</p>
+      <div class="dg-chart" id="chart-cascade" data-source="cascade"></div>
+    </div>
+  </section>
+
+  <!-- 4. Root causes -->
+  <section class="dg-sec" id="causes">
+    <h2>4. Why patients are missed <span class="dg-tag">Simulated</span></h2>
+    <p class="dg-cap">
+      Half of the patients missed for depression checks (<b class="cell dash-skeleton" data-source="pareto" data-field="patients" data-where="measure=134&amp;root_cause=A. Had a 2025 annual wellness exam, no screen recorded" data-fmt="int">—</b> ) came in for a yearly checkup and still weren't checked.
+      And <b class="cell dash-skeleton" data-source="pareto" data-field="patients" data-where="measure=370&amp;root_cause=A. Screened in the window with a negative PHQ-2, so no PHQ-9 was given" data-fmt="int">—</b> patients got only the short survey a year later, so their recovery couldn't be shown.
+    </p>
+    <div class="dg-grid">
+      <div class="dg-card">
+        <h3>Why patients weren't checked for depression</h3>
+        <p class="dg-note">Share of all failures; label shows patients and running total.</p>
+        <div class="dg-chart" id="chart-p134" data-source="pareto"></div>
+      </div>
+      <div class="dg-card">
+        <h3>Why patients weren't counted as recovered</h3>
+        <p class="dg-note">Share of all failures; label shows patients and running total.</p>
+        <div class="dg-chart" id="chart-p370" data-source="pareto"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 5. Who falls through -->
+  <section class="dg-sec" id="groups">
+    <h2>5. Who gets missed <span class="dg-tag">Simulated</span></h2>
+    <p class="dg-cap">
+      Young adults skip yearly checkups and miss the depression check with them: only
+      <b class="cell dash-skeleton" data-source="groups" data-field="rate" data-where="measure=134&amp;dimension=Age band&amp;grp=18-34" data-fmt="pct">—</b> of 18–34-year-olds are checked, against
+      <b class="cell dash-skeleton" data-source="groups" data-field="rate" data-where="measure=134&amp;dimension=Age band&amp;grp=65%2B" data-fmt="pct">—</b> of those 65 and older.
+    </p>
+    <div class="dg-grid">
+      <div class="dg-card">
+        <h3>Share checked for depression, by age</h3>
+        <p class="dg-note">2025. Ages 18–34 highlighted.</p>
+        <div class="dg-chart" id="chart-age" data-source="groups"></div>
+      </div>
+      <div class="dg-card">
+        <h3>Share checked for depression, by insurance</h3>
+        <p class="dg-note">Insurance on the patient's latest 2025 visit.</p>
+        <div class="dg-chart" id="chart-payer" data-source="groups"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. The fix -->
+  <section class="dg-sec" id="fix">
+    <h2>6. The fix, and how we'll know it's working <span class="dg-tag">Simulated</span></h2>
+    <p class="dg-cap">Three small changes to the medical-records system (highlighted): cheap, fast, and no new staff. Results assume half of visits use the change; recovery uses the most cautious estimate.</p>
+    <div class="dg-tiles">
+      <div class="dg-tile">
+        <div class="dg-small">Share checked for depression, with the changes</div>
+        <div class="dg-big"><span class="cell dash-skeleton" data-source="package" data-field="current_rate" data-where="measure=134&amp;r_scenario=n/a" data-fmt="pct">—</span><span class="dg-arrow">→</span><span class="cell accent" style="color: var(--dg-accent)" data-source="package" data-field="rate_at_50pct_adoption" data-where="measure=134&amp;r_scenario=n/a" data-fmt="pct">—</span></div>
+        <div class="dg-small">If every visit uses them: <span class="cell" data-source="package" data-field="rate_at_100pct_adoption" data-where="measure=134&amp;r_scenario=n/a" data-fmt="pct">—</span></div>
+      </div>
+      <div class="dg-tile">
+        <div class="dg-small">Share counted as recovered, with the changes (cautious estimate)</div>
+        <div class="dg-big"><span class="cell dash-skeleton" data-source="package" data-field="current_rate" data-where="measure=370&amp;r_scenario=floor" data-fmt="pct">—</span><span class="dg-arrow">→</span><span class="cell" style="color: var(--dg-accent)" data-source="package" data-field="rate_at_50pct_adoption" data-where="measure=370&amp;r_scenario=floor" data-fmt="pct">—</span></div>
+        <div class="dg-small">Middle estimate: <span class="cell" data-source="package" data-field="rate_at_50pct_adoption" data-where="measure=370&amp;r_scenario=middle" data-fmt="pct">—</span> · hopeful estimate: <span class="cell" data-source="package" data-field="rate_at_50pct_adoption" data-where="measure=370&amp;r_scenario=ceiling" data-fmt="pct">—</span></div>
+      </div>
+    </div>
+    <div class="dg-card">
+      <h3>Every possible fix, compared</h3>
+      <p class="dg-note">"After" assumes half of visits use the change. Recovery rows use the most cautious estimate. Extra mental-health support for patients still depressed is left out: its effect can't be estimated from this data.</p>
+      <div class="dg-tablewrap">
+        <table class="dg-table" id="lever-table" data-source="levers" data-row-key="lever_id,r_scenario">
+          <thead><tr>
+            <th data-field="lever_id">Fix</th>
+            <th data-source="lever_labels" data-field="change">What changes</th>
+            <th data-field="effort">Effort</th>
+            <th data-field="time_to_results">Time</th>
+            <th class="n" data-field="patients_reached">Patients helped</th>
+            <th data-source="lever_labels" data-field="measure_label">Score</th>
+            <th class="n" data-field="current_rate">Now</th>
+            <th class="n" data-field="rate_at_50pct_adoption">After</th>
+            <th class="n" data-field="rate_at_100pct_adoption">If every visit</th>
+          </tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="dg-card">
+      <h3>How we'll know it's working: share of yearly checkups that include a depression check</h3>
+      <p class="dg-note">
+        Steady for three years: middle <span class="cell" data-source="monthly_stats" data-field="median" data-row="0" data-fmt="pct">—</span>, high <span class="cell" data-source="monthly_stats" data-field="high" data-row="0" data-fmt="pct">—</span>.
+        After the changes, a month above the 3-year high is the first sign they're working.
+      </p>
+      <div class="dg-chart" id="chart-monthly" data-source="monthly monthly_stats"></div>
+    </div>
+    <div class="dg-card">
+      <h3>First step with real data</h3>
+      <ol class="dg-steps">
+        <li>Check Torrance Memorial's real records: do adults with a high score mostly get only the short survey a year later? If they already get the full survey, the problem is the treatment itself.</li>
+        <li>Rebuild both scores from the real records and compare them, patient by patient, with what was reported to Medicare.</li>
+        <li>Try the three changes at one or two clinics and watch the monthly chart.</li>
+      </ol>
+    </div>
+  </section>
+
+  <footer class="dg-foot">
+    Real: Medicare Shared Savings Program results, 2024, Torrance Memorial Integrated Physicians (ACO A4964) compared with all networks.
+    Simulated: fake patient records built to look real with Synthea (10 runs of 1,000 Torrance residents, seeds 42–51), because real records are private. Simulated results are a lead to confirm, not Torrance Memorial's actual numbers.
+    Terms: full survey = PHQ-9; short survey = PHQ-2; counted as recovered = remission (PHQ-9 below 5).
+    Analysis by Nancy Yeo · DuckDB SQL, Python (scipy).
+  </footer>
+</div>
+
+<script>
+(function () {
+  const root = document.querySelector('.dg');
+  const fmtPct = (v, d) => (Number(v)).toFixed(d) + '%';
+  const fmt = {
+    pct: v => fmtPct(v, 1),
+    pct0: v => fmtPct(v, 0),
+    pct2: v => fmtPct(v, 2),
+    int: v => d3.format(',')(Number(v))
+  };
+
+  const PLAIN = { '370': 'Depression: recovered after a year', '134': 'Depression: checked and followed up', '113': 'Colon cancer screening',
+    '112': 'Breast cancer screening', '318': 'Fall-risk screening', '438': 'Heart patients on statins', '110': 'Flu shots',
+    '479': 'Hospital readmissions', '001': 'Diabetes poorly controlled', '236': 'Blood pressure under control' };
+  const STEP = { '1': 'Had a high score', '2': 'Came back a year later', '3': 'Checked again', '4': 'Got the full survey', '5': 'Counted as recovered' };
+  const CAUSE = { '134A': "Had a yearly checkup, but wasn't checked", '134B': 'Skipped the yearly checkup', '134C': 'Checked, but score not recorded (pregnancy visits)',
+    '134D': 'Teen with a high score, no follow-up', '370A': "Got only the short survey, so recovery couldn't be shown", '370B': "Came in, but wasn't checked",
+    '370C': "Didn't come in that year", '370D': 'Got the full survey, still depressed' };
+
+  dash.calc('lever_labels', {
+    inputs: ['levers'],
+    title: 'Fixes in plain words',
+    description: 'A plain-language name for each fix and the score it moves.',
+    fn: (levers) => levers.map(r => ({
+      lever_id: r.lever_id,
+      r_scenario: r.r_scenario,
+      change: ({ L1: 'Require a depression check at every yearly checkup', L2: "Check at any visit if it's been a year",
+                 L3: 'Add a box to record the score at pregnancy visits', L4: 'Fast mental-health referral for teens with a high score',
+                 M1: 'Give the full survey a year later to past high scorers', M2: 'Same, at any visit that year',
+                 M3: 'Send the full survey by phone or patient portal', M4: 'Extra mental-health support for patients still depressed' })[r.lever_id],
+      measure_label: r.measure === '134' ? 'Checked' : 'Recovered'
+    }))
+  });
+
+  dash.calc('monthly_stats', {
+    inputs: ['monthly'],
+    title: 'Run chart baseline',
+    description: 'Median and highest monthly share of wellness exams with a scored screen, 2023-2025.',
+    fn: (monthly) => {
+      const v = monthly.map(r => Number(r.pct_screened));
+      return [{ median: d3.median(v), high: d3.max(v) }];
+    }
+  });
+
+  function parseWhere(s) {
+    return s.split('&').map(p => {
+      const i = p.indexOf('=');
+      return [decodeURIComponent(p.slice(0, i)), decodeURIComponent(p.slice(i + 1))];
+    });
+  }
+
+  function fillCells() {
+    root.querySelectorAll('.cell').forEach(el => {
+      const d = dash.data(el.dataset.source);
+      if (d.status !== 'ok') return;
+      const rows = d.data || [];
+      let row;
+      if (el.dataset.row !== undefined) row = rows[Number(el.dataset.row)];
+      else {
+        const conds = parseWhere(el.dataset.where);
+        row = rows.find(r => conds.every(([k, v]) => String(r[k]) === v));
+      }
+      el.classList.remove('dash-skeleton');
+      const f = fmt[el.dataset.fmt] || (v => String(v));
+      el.textContent = row && row[el.dataset.field] != null ? f(row[el.dataset.field]) : '—';
+    });
+  }
+
+
+  function tipFor(box) {
+    let tip = box.querySelector('.dg-tip');
+    if (!tip) { tip = document.createElement('div'); tip.className = 'dg-tip'; tip.hidden = true; box.appendChild(tip); }
+    return {
+      show(ev, lines) {
+        tip.replaceChildren();
+        lines.forEach((l, i) => { const div = document.createElement('div'); if (i === 0) div.className = 'k'; div.textContent = l; tip.appendChild(div); });
+        tip.hidden = false;
+        const b = box.getBoundingClientRect();
+        let x = ev.clientX - b.left + 12, y = ev.clientY - b.top + 12;
+        const w = tip.offsetWidth, h = tip.offsetHeight;
+        if (x + w > b.width) x = Math.max(0, ev.clientX - b.left - w - 12);
+        if (y + h > b.height + 40) y = Math.max(0, ev.clientY - b.top - h - 12);
+        tip.style.left = x + 'px'; tip.style.top = y + 'px';
+      },
+      hide() { tip.hidden = true; }
+    };
+  }
+
+  function stateGuard(box, ids) {
+    const sts = ids.map(id => dash.data(id).status);
+    if (sts.every(s => s === 'ok')) { box.classList.remove('dash-skeleton'); return true; }
+    box.replaceChildren();
+    if (sts.some(s => s === 'error' || s === 'connect' || s === 'declined' || s === 'missing')) {
+      box.classList.remove('dash-skeleton');
+      const f = document.createElement('div'); f.className = 'dg-fail'; f.textContent = 'Failed to load'; box.appendChild(f);
+    } else box.classList.add('dash-skeleton');
+    return false;
+  }
+
+  // Horizontal bar chart from one left edge. items: {label, value, accent, text, tip[]}
+  function hbars(box, items, opts) {
+    const accent = dash.colors[0], muted = 'var(--cds-chart-muted)';
+    const W = Math.max(280, box.clientWidth);
+    const narrow = W < 560 || opts.labelW === 0;
+    const barH = 22, gap = 12;
+    const labelW = narrow ? 0 : Math.min(opts.labelW, W * 0.42);
+    const rowH = narrow ? barH + 22 : barH;
+    const H = items.length * (rowH + gap) + 20;
+    box.style.minHeight = H + 'px';
+    const valueRoom = opts.valueRoom || 110;
+    const x = d3.scaleLinear([0, opts.max || 100], [0, Math.max(60, W - labelW - valueRoom)]);
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const g = svg.append('g').attr('transform', `translate(${labelW},0)`);
+    if (opts.ref != null) {
+      g.append('line').attr('x1', x(opts.ref)).attr('x2', x(opts.ref)).attr('y1', 0).attr('y2', H - 14)
+        .style('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 4');
+      g.append('text').attr('x', x(opts.ref)).attr('y', H - 2).attr('text-anchor', 'middle')
+        .style('fill', 'var(--color-fg-muted)').style('font-size', 'var(--cds-font-size-caption)').text(opts.refLabel || '');
+    }
+    const tip = tipFor(box);
+    items.forEach((it, i) => {
+      const y0 = i * (rowH + gap);
+      const yb = narrow ? y0 + 18 : y0;
+      svg.append('text').attr('x', narrow ? 0 : labelW - 10).attr('y', narrow ? y0 + 12 : y0 + barH / 2 + 4)
+        .attr('text-anchor', narrow ? 'start' : 'end').style('fill', 'var(--color-fg)')
+        .style('font-size', 'var(--cds-font-size-caption)').text(it.label);
+      const bw = Math.max(2, x(it.value));
+      const rect = g.append('rect').attr('x', 0).attr('y', yb).attr('height', barH).attr('width', bw).attr('rx', 4)
+        .style('fill', it.accent ? (it.color || accent) : muted);
+      g.append('text').attr('x', bw + 8).attr('y', yb + barH / 2 + 4).style('fill', 'var(--color-fg)')
+        .style('font-size', 'var(--cds-font-size-caption)').style('font-variant-numeric', 'tabular-nums').text(it.text);
+      const hit = g.append('rect').attr('x', 0).attr('y', yb - gap / 2).attr('height', barH + gap).attr('width', x.range()[1] + valueRoom)
+        .attr('fill', 'transparent');
+      hit.on('mousemove', ev => { rect.attr('opacity', 0.8); tip.show(ev, it.tip); })
+         .on('mouseleave', () => { rect.attr('opacity', 1); tip.hide(); });
+    });
+  }
+
+  function drawAco() {
+    const box = document.getElementById('chart-aco');
+    if (!stateGuard(box, ['aco'])) return;
+    box.replaceChildren();
+    const rows = dash.data('aco').data.slice().sort((a, b) => Number(a.pct_acos_worse_than_tmip) - Number(b.pct_acos_worse_than_tmip));
+    hbars(box, rows.map(r => ({
+      label: PLAIN[r.quality_id] || r.measure_name, value: Number(r.pct_acos_worse_than_tmip),
+      accent: r.quality_id === '134' || r.quality_id === '370',
+      text: fmtPct(r.pct_acos_worse_than_tmip, 0),
+      tip: [PLAIN[r.quality_id] || r.measure_name, 'Torrance Memorial: ' + r.tmip_value + ' · Typical network: ' + r.national_median,
+            'Medicare measure ' + r.quality_id + ' · ' + r.acos_reporting + ' networks reporting']
+    })), { labelW: 300, ref: 50, refLabel: 'National middle', valueRoom: 50 });
+  }
+
+  function drawCascade() {
+    const box = document.getElementById('chart-cascade');
+    if (!stateGuard(box, ['cascade'])) return;
+    box.replaceChildren();
+    const rows = dash.data('cascade').data;
+    const groups = ['Adult 18+', 'Teen 12-17'];
+    const accent = dash.colors[0], crit = 'var(--cds-chart-status-critical)';
+    groups.forEach(gname => {
+      const sub = document.createElement('div');
+      sub.style.position = 'relative';
+      const h = document.createElement('div');
+      h.className = 'dg-small'; h.style.margin = '8px 0 4px'; h.textContent = gname === 'Adult 18+' ? 'Adults (short survey first)' : 'Teens (full survey at checkups)';
+      box.appendChild(h); box.appendChild(sub);
+      const rs = rows.filter(r => r.age_group === gname).sort((a, b) => Number(a.step_order) - Number(b.step_order));
+      // biggest drop between consecutive steps
+      let worst = -1, worstDrop = -1;
+      rs.forEach((r, i) => { if (i > 0) { const dr = Number(rs[i - 1].pct_of_start) - Number(r.pct_of_start); if (dr > worstDrop) { worstDrop = dr; worst = i; } } });
+      hbars(sub, rs.map((r, i) => ({
+        label: STEP[r.step_order], value: Number(r.pct_of_start),
+        accent: true, color: (gname === 'Adult 18+' && i === worst) ? crit : (i === rs.length - 1 ? accent : 'var(--cds-chart-muted)'),
+        text: fmtPct(r.pct_of_start, 1) + '  (' + d3.format(',')(Number(r.patients)) + ')',
+        tip: [(gname === 'Adult 18+' ? 'Adults' : 'Teens') + ' · ' + STEP[r.step_order], d3.format(',')(Number(r.patients)) + ' patients, ' + fmtPct(r.pct_of_start, 1) + ' of the starting group',
+              i > 0 ? 'Drop from previous step: ' + (Number(rs[i - 1].pct_of_start) - Number(r.pct_of_start)).toFixed(1) + ' points' : 'Starting group']
+      })), { labelW: 230, valueRoom: 110 });
+    });
+    box.style.minHeight = '';
+  }
+
+  function drawPareto(id, measure) {
+    const box = document.getElementById(id);
+    if (!stateGuard(box, ['pareto'])) return;
+    box.replaceChildren();
+    const rs = dash.data('pareto').data.filter(r => r.measure === measure).sort((a, b) => Number(b.patients) - Number(a.patients));
+    hbars(box, rs.map((r, i) => ({
+      label: CAUSE[measure + r.root_cause[0]] || r.root_cause, value: Number(r.pct_of_failures), accent: i === 0,
+      text: d3.format(',')(Number(r.patients)) + ' · ' + fmtPct(r.pct_of_failures, 1),
+      tip: [CAUSE[measure + r.root_cause[0]] || r.root_cause, d3.format(',')(Number(r.patients)) + ' patients, ' + fmtPct(r.pct_of_failures, 1) + ' of failures', 'Running total: ' + fmtPct(r.cumulative_pct, 1)]
+    })), { labelW: 0, valueRoom: 120, max: 100 });
+  }
+
+  function drawGroups() {
+    const ok = ['chart-age', 'chart-payer'].map(id => stateGuard(document.getElementById(id), ['groups']));
+    if (!ok[0]) return;
+    const rows = dash.data('groups').data.filter(r => r.measure === '134');
+    const age = document.getElementById('chart-age'); age.replaceChildren();
+    const order = ['12-17', '18-34', '35-49', '50-64', '65+'];
+    const ar = rows.filter(r => r.dimension === 'Age band').sort((a, b) => order.indexOf(a.grp) - order.indexOf(b.grp));
+    hbars(age, ar.map(r => ({ label: r.grp, value: Number(r.rate), accent: r.grp === '18-34', text: fmtPct(r.rate, 1),
+      tip: ['Ages ' + r.grp, d3.format(',')(Number(r.passed)) + ' of ' + d3.format(',')(Number(r.patients)) + ' patients checked'] })),
+      { labelW: 70, valueRoom: 60 });
+    const pay = document.getElementById('chart-payer'); pay.replaceChildren();
+    const pr = rows.filter(r => r.dimension === 'Payer').sort((a, b) => Number(b.rate) - Number(a.rate));
+    hbars(pay, pr.map(r => ({ label: r.grp, value: Number(r.rate), accent: false, text: fmtPct(r.rate, 1),
+      tip: [r.grp, d3.format(',')(Number(r.passed)) + ' of ' + d3.format(',')(Number(r.patients)) + ' patients checked'] })),
+      { labelW: 190, valueRoom: 60 });
+  }
+
+  function drawTable() {
+    const tbody = document.querySelector('#lever-table tbody');
+    tbody.replaceChildren();
+    const d = dash.data('levers');
+    const lab = dash.data('lever_labels');
+    if (d.status !== 'ok' || lab.status !== 'ok') return;
+    const labelOf = (r) => lab.data.find(x => x.lever_id === r.lever_id && x.r_scenario === r.r_scenario) || {};
+    const picks = ['L1', 'L3', 'M1'];
+    d.data.filter(r => (r.r_scenario === 'n/a' || r.r_scenario === 'floor') && r.lever_id !== 'M4')
+      .forEach(r => {
+        const tr = document.createElement('tr');
+        tr.dataset.key = r.lever_id + ',' + encodeURIComponent(r.r_scenario);
+        if (picks.includes(r.lever_id)) tr.className = 'pick';
+        const cells = [
+          [r.lever_id, ''], [labelOf(r).change, ''], [r.effort, ''], [r.time_to_results, ''],
+          [d3.format(',')(Number(r.patients_reached)), 'n'], [labelOf(r).measure_label, ''], [fmtPct(r.current_rate, 1), 'n'],
+          [fmtPct(r.rate_at_50pct_adoption, 1), 'n'], [fmtPct(r.rate_at_100pct_adoption, 1), 'n']
+        ];
+        cells.forEach(([t, c]) => { const td = document.createElement('td'); td.textContent = t; if (c) td.className = c; tr.appendChild(td); });
+        tbody.appendChild(tr);
+      });
+  }
+
+  function drawMonthly() {
+    const box = document.getElementById('chart-monthly');
+    if (!stateGuard(box, ['monthly', 'monthly_stats'])) return;
+    box.replaceChildren();
+    const rows = dash.data('monthly').data.map(r => ({ m: new Date(r.month + 'T00:00:00Z'), v: Number(r.pct_screened), n: Number(r.wellness_exams), s: Number(r.exams_with_screen) }));
+    const st = dash.data('monthly_stats').data[0];
+    const W = Math.max(280, box.clientWidth), H = 240, m = { t: 14, r: 92, b: 26, l: 40 };
+    box.style.minHeight = H + 'px';
+    const x = d3.scaleUtc(d3.extent(rows, r => r.m), [m.l, W - m.r]);
+    const y = d3.scaleLinear([65, 85], [H - m.b, m.t]);
+    const svg = d3.select(box).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('height', H);
+    const muted = 'var(--color-fg-muted)';
+    svg.append('g').selectAll('line').data(y.ticks(4)).join('line')
+      .attr('x1', m.l).attr('x2', W - m.r).attr('y1', d => y(d)).attr('y2', d => y(d)).style('stroke', 'var(--cds-chart-grid)');
+    svg.append('g').selectAll('text').data(y.ticks(4)).join('text')
+      .attr('x', m.l - 6).attr('y', d => y(d) + 4).attr('text-anchor', 'end').style('fill', muted)
+      .style('font-size', 'var(--cds-font-size-caption)').text(d => d + '%');
+    const xt = svg.append('g').attr('transform', `translate(0,${H - m.b})`)
+      .call(d3.axisBottom(x).ticks(W < 500 ? d3.utcYear.every(1) : d3.utcMonth.every(6)).tickFormat(d3.utcFormat(W < 500 ? '%Y' : '%b %Y')).tickSizeOuter(0));
+    xt.attr('font-size', null).attr('font-family', null);
+    xt.selectAll('text').style('fill', muted).style('font-size', 'var(--cds-font-size-caption)');
+    xt.selectAll('line,path').style('stroke', 'var(--cds-chart-axis)');
+    [[st.median, 'Median ' + st.median.toFixed(1) + '%'], [st.high, 'High ' + st.high.toFixed(1) + '%']].forEach(([v, lab]) => {
+      svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(v)).attr('y2', y(v))
+        .style('stroke', 'var(--cds-chart-reference)').attr('stroke-dasharray', '4 4');
+      svg.append('text').attr('x', W - m.r + 6).attr('y', y(v) + 4).style('fill', muted)
+        .style('font-size', 'var(--cds-font-size-caption)').text(lab);
+    });
+    svg.append('path').datum(rows).attr('fill', 'none').style('stroke', dash.colors[0]).attr('stroke-width', 2)
+      .attr('stroke-linejoin', 'round').attr('stroke-linecap', 'round').attr('d', d3.line(r => x(r.m), r => y(r.v)));
+    const dot = svg.append('circle').attr('r', 4).style('fill', dash.colors[0]).attr('opacity', 0);
+    const tip = tipFor(box);
+    const bis = d3.bisector(r => r.m).center;
+    svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', W - m.l - m.r).attr('height', H - m.t - m.b).attr('fill', 'transparent')
+      .on('mousemove', ev => {
+        const [px] = d3.pointer(ev); const r = rows[bis(rows, x.invert(px))];
+        dot.attr('cx', x(r.m)).attr('cy', y(r.v)).attr('opacity', 1);
+        tip.show(ev, [d3.utcFormat('%B %Y')(r.m), r.v.toFixed(1) + '% screened', d3.format(',')(r.s) + ' of ' + d3.format(',')(r.n) + ' wellness exams']);
+      })
+      .on('mouseleave', () => { dot.attr('opacity', 0); tip.hide(); });
+  }
+
+  root.style.setProperty('--dg-accent', dash.colors[0]);
+
+  dash.onData(() => {
+    root.style.setProperty('--dg-accent', dash.colors[0]);
+    fillCells();
+    drawAco();
+    drawCascade();
+    drawPareto('chart-p134', '134');
+    drawPareto('chart-p370', '370');
+    drawGroups();
+    drawTable();
+    drawMonthly();
+  });
+})();
+</script>

@@ -1,0 +1,10 @@
+output/
+*.jar
+*.duckdb
+*.duckdb.wal
+synthea_*.log
+__pycache__/
+.DS_Store
+# private working notes (job-application brief)
+CLAUDE.md
+brief_v1_readmissions.md
